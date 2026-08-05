@@ -1,0 +1,97 @@
+# Tune Therapeutics
+
+> Clinical-stage epigenetic editing biotechnology company in Durham, NC and Seattle, WA.
+> Its TEMPO platform tunes gene expression through programmable DNA-binding epigenome
+> editing, without cutting or permanently altering the DNA sequence. Lead program TUNE-401
+> is an investigational epigenetic silencing therapy for chronic hepatitis B.
+
+generated: 2026-08-05
+method: generated
+source: apis.yml + probed artifacts in this repository (no /llms.txt is published at https://tunetx.com/llms.txt — HTTP 404)
+
+## What an agent should know first
+
+Tune Therapeutics has **no product API and no developer program**. There is no developer
+portal, no documentation site, no API reference, no SDK, no CLI, no sandbox, no status page,
+no changelog and no OpenAPI document. Probes for /openapi.json, /swagger.json, /api-docs,
+/graphql, /developers and /docs all return HTTP 404, and no api., docs., developer. or
+status. subdomain resolves in DNS. If you are looking for a Tune Therapeutics API to call,
+there is not one — this is a research-stage therapeutics company, not a software vendor.
+
+The one machine-readable surface on the company domain comes from its WordPress marketing
+site, not from a product team. It is documented below because it is real and reachable,
+not because Tune Therapeutics offers it.
+
+## Company
+
+- [Home](https://tunetx.com/)
+- [About](https://tunetx.com/about-us/): Founded 2021 by Charles Gersbach, Fyodor Urnov and
+  Dan McHugh. John McHutchison is CEO and Chairman; Akira Matsuno is Co-Founder and
+  President. Offices at 300 Morris St Suite 320, Durham NC and 1930 Boren Ave Floor 5,
+  Seattle WA.
+- [Our Values](https://tunetx.com/values/)
+- [Careers](https://tunetx.com/careers/)
+- [Join The Band](https://tunetx.com/join-the-band/)
+- [Contact](https://tunetx.com/contact-us/): media@tunetx.com, careers@tunetx.com,
+  partners@tunetx.com
+
+## Science
+
+- [The Science](https://tunetx.com/the-science/)
+- [TEMPO Platform](https://tunetx.com/the-science/tempo-platform/): tunable epigenome
+  editing; no double- or single-strand DNA breaks, no permanent sequence change.
+- [Applications](https://tunetx.com/the-science/applications/)
+- [Epigenomics](https://tunetx.com/the-science/epigenomics/)
+
+## News and publications
+
+- [News & Insights](https://tunetx.com/news-and-insights/)
+- [RSS feed](https://tunetx.com/feed/)
+- [Scientific Presentations](https://tunetx.com/scientific-presentations/)
+- [Resources & Links](https://tunetx.com/resources-and-links/)
+
+## Legal
+
+- [Terms and Conditions](https://tunetx.com/terms-and-conditions/)
+- [Privacy Policy](https://tunetx.com/privacy-policy/)
+- [Cookie Policy](https://tunetx.com/cookie-policy/)
+
+## Machine-readable surface (WordPress platform, not a product API)
+
+- [WordPress REST API index](https://tunetx.com/wp-json/): HTTP 200. 432 routes across 23
+  namespaces. Published site content under `wp/v2` is readable anonymously. Authentication
+  for everything else is WordPress Application Passwords, issued from wp-admin.
+- [MCP namespace](https://tunetx.com/wp-json/mcp): HTTP 200. Lists two Model Context
+  Protocol servers registered by the WordPress MCP Adapter plugin.
+  - `https://tunetx.com/wp-json/mcp/mcp-oauth-server` — OAuth 2.1 protected. An
+    unauthenticated `tools/list` returns HTTP 401 with
+    `WWW-Authenticate: Bearer realm="https://tunetx.com", resource_metadata="..."`.
+  - `https://tunetx.com/wp-json/mcp/mcp-adapter-default-server` — HTTP 401 for anonymous
+    callers via the standard WordPress REST permission check.
+  - The tool list is auth-gated on both servers and is **not** recorded anywhere in this
+    repository. Do not assume a tool set.
+- [OAuth authorization server metadata](https://tunetx.com/.well-known/oauth-authorization-server/):
+  HTTP 200, RFC 8414. issuer `https://tunetx.com`, authorization_code + refresh_token,
+  PKCE S256 required, public clients (`token_endpoint_auth_methods_supported: ["none"]`),
+  client_id metadata documents supported, single scope `mcp`.
+- [OAuth protected resource metadata](https://tunetx.com/.well-known/oauth-protected-resource):
+  HTTP 200, RFC 9728. Names the MCP OAuth server as the protected resource, bearer token in
+  the header, scope `mcp`.
+- [Abilities API](https://tunetx.com/wp-json/wp-abilities/v1): HTTP 200 for route
+  descriptors; the ability list itself returns HTTP 401.
+
+## Not published
+
+No `/llms.txt` (404). No `/.well-known/security.txt` (404). No
+`/.well-known/openid-configuration` (404). No `/.well-known/api-catalog` (404). No A2A agent
+card at `/.well-known/agent-card.json` or `/.well-known/agent.json` (both 404). No public
+GitHub repositories (the `tunetx` GitHub organization exists but has 0 public repos). No
+first-party packages on npm, PyPI or any other registry. No status page, trust center,
+certifications page, pricing, sign-up or bug bounty.
+
+## About this file
+
+This file was generated by [API Evangelist](https://apievangelist.com) from publicly
+reachable material and live anonymous probes on 2026-08-05. It is a third-party profile.
+Tune Therapeutics did not author it and is not affiliated with API Evangelist. Corrections
+and removal are free: info@apievangelist.com

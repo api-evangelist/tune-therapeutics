@@ -1,23 +1,118 @@
 aid: tune-therapeutics
 name: Tune Therapeutics
-description: 'Tune Therapeutics is a company surfaced via the API Evangelist harvest backlog (source:
-  secondary-market) and added to the network as a stub for full-pipeline profiling.'
+description: 'Tune Therapeutics is a clinical-stage epigenetic editing biotechnology company
+  headquartered in Durham, North Carolina with a second site in Seattle, Washington. Founded in
+  2021 by Charles Gersbach, Fyodor Urnov and Dan McHugh, the company develops its TEMPO platform
+  for tunable epigenome editing — programmable DNA-binding modulation of gene expression that
+  does not cut or permanently alter the underlying DNA sequence. Its lead program, TUNE-401, is
+  an investigational epigenetic silencing therapy for chronic hepatitis B cleared by New Zealand
+  Medsafe for a Phase 1b trial. Tune publishes no product API and operates no developer program;
+  the only machine-readable surface it exposes is the WordPress REST API and a pair of
+  OAuth-gated Model Context Protocol servers shipped by plugins on its corporate marketing site.'
 url: https://raw.githubusercontent.com/api-evangelist/tune-therapeutics/refs/heads/main/apis.yml
+image: https://tunetx.com/wp-content/uploads/2022/10/TuneTx_Meta.png
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment
 specificationVersion: '0.20'
 created: '2026-08-05'
 modified: '2026-08-05'
 tags:
 - Company
-apis: []
+- Biotechnology
+- Life Sciences
+- Therapeutics
+- Genomics
+- Epigenetics
+- Gene Therapy
+- Clinical Stage
+- Research
+apis:
+- aid: tune-therapeutics:website-mcp
+  name: Tune Therapeutics Website MCP Server
+  description: 'Two Model Context Protocol servers exposed from the Tune Therapeutics corporate
+    WordPress site via the WordPress MCP Adapter plugin, backed by the WordPress Abilities API.
+    Both endpoints are live and answer JSON-RPC over HTTP, and both are protected: an
+    unauthenticated tools/list returns HTTP 401 with a spec-conformant WWW-Authenticate Bearer
+    challenge pointing at RFC 9728 protected-resource metadata. Discovery metadata (RFC 8414
+    authorization-server, RFC 9728 protected-resource) is served anonymously and was captured
+    verbatim. This is a content-management-platform surface, not a first-party Tune Therapeutics
+    product API — recorded because it is a real, live, agent-reachable endpoint on the company
+    domain, not because the company markets it.'
+  humanURL: https://tunetx.com/
+  baseURL: https://tunetx.com/wp-json/mcp/
+  tags:
+  - MCP
+  - Model Context Protocol
+  - OAuth
+  - WordPress
+  x-origin: platform-default
+  x-origin-note: 'Provided by the WordPress MCP Adapter plugin, not authored or marketed by
+    Tune Therapeutics.'
+  properties:
+  - type: MCPServer
+    url: mcp/tune-therapeutics-mcp.yml
+  - type: Authentication
+    url: authentication/tune-therapeutics-authentication.yml
+  - type: OAuthScopes
+    url: scopes/tune-therapeutics-scopes.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/tune-therapeutics-domain-security.yml
 - type: Website
-  url: https://forgeglobal.com/tune-therapeutics_stock/
+  url: https://tunetx.com/
+- type: Blog
+  url: https://tunetx.com/news-and-insights/
+- type: BlogRSS
+  url: https://tunetx.com/feed/
+- type: Support
+  url: https://tunetx.com/contact-us/
+- type: TermsOfService
+  url: https://tunetx.com/terms-and-conditions/
+- type: PrivacyPolicy
+  url: https://tunetx.com/privacy-policy/
+- type: WellKnown
+  url: well-known/tune-therapeutics-well-known.yml
+- type: MCPServer
+  url: mcp/tune-therapeutics-mcp.yml
+- type: Authentication
+  url: authentication/tune-therapeutics-authentication.yml
+- type: OAuthScopes
+  url: scopes/tune-therapeutics-scopes.yml
+- type: Conformance
+  url: conformance/tune-therapeutics-conformance.yml
+- type: LLMsTxt
+  url: llms/tune-therapeutics-llms.txt
+x-enrichment:
+  date: '2026-08-05'
+  status: enriched
+  artifacts_added: 10
+  pass: local-v1
+x-coverage:
+  state: covered
+  reason: platform-surface-only
+  detail: >-
+    Tune Therapeutics is a clinical-stage biotech with no product API and no developer
+    program — /openapi.json, /swagger.json, /api-docs, /graphql, /docs and /developers all
+    404 and no api./docs./developer. subdomain resolves — but its corporate WordPress site
+    exposes two live OAuth 2.1-gated Model Context Protocol servers under
+    /wp-json/mcp/ with RFC 8414 and RFC 9728 discovery metadata served anonymously, which
+    is what this profile captures.
+  evidence:
+  - url: https://tunetx.com/openapi.json
+    status: 404
+  - url: https://tunetx.com/.well-known/oauth-protected-resource
+    status: 200
+  - url: https://tunetx.com/wp-json/mcp
+    status: 200
+  - url: https://tunetx.com/wp-json/mcp/mcp-oauth-server
+    status: 401
+  - url: https://tunetx.com/.well-known/agent-card.json
+    status: 404
+  checked: '2026-08-05'

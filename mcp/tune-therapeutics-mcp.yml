@@ -1,0 +1,99 @@
+generated: '2026-08-05'
+method: probed
+source: https://tunetx.com/wp-json/mcp
+name: Tune Therapeutics Website MCP Servers
+status: live-gated
+description: >-
+  Tune Therapeutics does not market or document a Model Context Protocol server. Its
+  corporate WordPress site nevertheless runs the WordPress MCP Adapter plugin, which
+  registers an `mcp` REST namespace and publishes two live JSON-RPC MCP endpoints, backed
+  by the WordPress Abilities API (`wp-abilities/v1`). Both endpoints answer, and both
+  refuse anonymous callers correctly: an unauthenticated `tools/list` returns HTTP 401
+  with a spec-conformant `WWW-Authenticate: Bearer` challenge carrying an RFC 9728
+  `resource_metadata` pointer. The live tool list and its inputSchemas therefore require
+  authenticated introspection and are NOT recorded here — no tool names were guessed.
+
+origin: platform-default
+origin_note: >-
+  This surface comes from a content-management plugin, not from a Tune Therapeutics
+  product. It is recorded because it is real, live, on the company's own domain, and
+  reachable by any agent — not because the company offers it as an API.
+
+transport: streamable-http
+protocol: Model Context Protocol (JSON-RPC 2.0 over HTTP)
+
+servers:
+- name: mcp-oauth-server
+  url: https://tunetx.com/wp-json/mcp/mcp-oauth-server
+  methods: [POST, GET, DELETE]
+  auth: oauth2
+  probe:
+    method: tools/list
+    http_status: 401
+    body: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+    www_authenticate: >-
+      Bearer realm="https://tunetx.com",
+      resource_metadata="https://tunetx.com/.well-known/oauth-protected-resource"
+  note: >-
+    The OAuth-protected server named by the RFC 9728 protected-resource document. Correct
+    MCP authorization behaviour: challenge names the resource metadata document.
+- name: mcp-adapter-default-server
+  url: https://tunetx.com/wp-json/mcp/mcp-adapter-default-server
+  methods: [POST, GET, DELETE]
+  auth: wordpress-session-or-application-password
+  probe:
+    method: tools/list
+    http_status: 401
+    body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+  note: >-
+    The adapter's default server. Rejects anonymous callers through the standard WordPress
+    REST permission check rather than the MCP OAuth challenge.
+
+discovery:
+- url: https://tunetx.com/wp-json/mcp
+  status: 200
+  file: tune-therapeutics-mcp-namespace.json
+  note: Namespace route listing — saved verbatim; this is where both server URLs came from.
+- url: https://tunetx.com/.well-known/oauth-protected-resource
+  status: 200
+  note: RFC 9728 metadata naming mcp-oauth-server as the protected resource, scope "mcp".
+- url: https://tunetx.com/.well-known/oauth-authorization-server/
+  status: 200
+  note: RFC 8414 metadata for the paired OAuth 2.1 authorization server.
+
+backing_surface:
+  name: WordPress Abilities API
+  namespace: wp-abilities/v1
+  index_url: https://tunetx.com/wp-json/wp-abilities/v1
+  index_status: 200
+  abilities_list_url: https://tunetx.com/wp-json/wp-abilities/v1/abilities
+  abilities_list_status: 401
+  note: >-
+    The abilities registry is what the MCP adapter turns into tools. Its route descriptors
+    (with JSON Schema args) are readable anonymously, but the ability list itself returns
+    401, so the concrete tool set cannot be enumerated without credentials.
+
+tools: []
+tools_note: >-
+  EMPTY BY DESIGN. tools/list is auth-gated on both servers and there is no llms.txt or
+  published tool catalog to fall back to. Recording a speculative WordPress tool list here
+  would be fabrication. Re-run with an authenticated bearer token to populate this.
+
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://tunetx.com/wp-json/mcp
+    method: GET
+    status: 200
+  - url: https://tunetx.com/wp-json/mcp/mcp-oauth-server
+    method: 'POST tools/list'
+    status: 401
+  - url: https://tunetx.com/wp-json/mcp/mcp-oauth-server
+    method: 'POST initialize'
+    status: 401
+  - url: https://tunetx.com/wp-json/mcp/mcp-adapter-default-server
+    method: 'POST tools/list'
+    status: 401
+  - url: https://tunetx.com/wp-json/wp-abilities/v1/abilities
+    method: GET
+    status: 401

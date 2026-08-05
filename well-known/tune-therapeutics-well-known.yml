@@ -1,0 +1,93 @@
+generated: '2026-08-05'
+method: probed
+source: https://tunetx.com/.well-known/
+name: Tune Therapeutics — .well-known index
+description: >-
+  Every RFC 8615 well-known path probed anonymously against the single Tune Therapeutics
+  host, tunetx.com. There is no api., docs., developer. or status. subdomain (all fail DNS
+  resolution), so tunetx.com is the only host with a surface to probe. Two paths return
+  real JSON and were saved verbatim: the RFC 8414 OAuth authorization-server metadata and
+  the RFC 9728 OAuth protected-resource metadata, both emitted by the WordPress MCP Adapter
+  plugin running on the corporate marketing site. Every other well-known path returns the
+  site's WordPress 404 page (HTTP 404, text/html) — a genuine 404, not a soft-404.
+
+host: tunetx.com
+
+probes:
+- path: /.well-known/oauth-authorization-server
+  url: https://tunetx.com/.well-known/oauth-authorization-server
+  status: 301
+  note: >-
+    Redirects to the trailing-slash form; WordPress canonical redirect. Follow to get 200.
+- path: /.well-known/oauth-authorization-server/
+  url: https://tunetx.com/.well-known/oauth-authorization-server/
+  status: 200
+  content_type: application/json; charset=UTF-8
+  file: tune-therapeutics-oauth-authorization-server.json
+  spec: RFC 8414
+  note: >-
+    OAuth 2.1 authorization server metadata. issuer https://tunetx.com, PKCE S256 only,
+    authorization_code + refresh_token grants, scopes_supported ["mcp"],
+    token_endpoint_auth_methods_supported ["none"] (public clients),
+    client_id_metadata_document_supported true.
+- path: /.well-known/oauth-protected-resource
+  url: https://tunetx.com/.well-known/oauth-protected-resource
+  status: 200
+  content_type: application/json; charset=UTF-8
+  file: tune-therapeutics-oauth-protected-resource.json
+  spec: RFC 9728
+  note: >-
+    Names https://tunetx.com/wp-json/mcp/mcp-oauth-server as the protected resource,
+    bearer token in the Authorization header, scope "mcp".
+- path: /.well-known/security.txt
+  url: https://tunetx.com/.well-known/security.txt
+  status: 404
+  content_type: text/html; charset=UTF-8
+  note: WordPress 404 page. No RFC 9116 security.txt published.
+- path: /.well-known/openid-configuration
+  url: https://tunetx.com/.well-known/openid-configuration
+  status: 404
+  content_type: text/html; charset=UTF-8
+  note: >-
+    No OpenID Connect discovery document. The site's OAuth server is authorization-only,
+    not an OIDC provider.
+- path: /.well-known/api-catalog
+  url: https://tunetx.com/.well-known/api-catalog
+  status: 404
+  content_type: text/html; charset=UTF-8
+  note: No RFC 9727 API catalog.
+- path: /.well-known/ai-plugin.json
+  url: https://tunetx.com/.well-known/ai-plugin.json
+  status: 404
+  content_type: text/html; charset=UTF-8
+- path: /.well-known/agent-card.json
+  url: https://tunetx.com/.well-known/agent-card.json
+  status: 404
+  content_type: text/html; charset=UTF-8
+  note: No A2A agent card. See a2a/ — nothing written, per the search-only rule.
+- path: /.well-known/agent.json
+  url: https://tunetx.com/.well-known/agent.json
+  status: 404
+  content_type: text/html; charset=UTF-8
+  note: Legacy pre-0.3 A2A path also misses.
+
+related_probes:
+- url: https://tunetx.com/robots.txt
+  status: 200
+  note: >-
+    Default WordPress robots.txt. Disallows only /wp-admin/, allows admin-ajax.php, and
+    points at https://tunetx.com/sitemap.xml. Nothing in this pipeline's probe set is
+    disallowed.
+- url: https://tunetx.com/llms.txt
+  status: 404
+  note: No provider-published llms.txt. See llms/ for a generated one.
+- url: https://tunetx.com/openapi.json
+  status: 404
+- url: https://tunetx.com/swagger.json
+  status: 404
+- url: https://tunetx.com/api-docs
+  status: 404
+- url: https://tunetx.com/graphql
+  status: 404
+- url: https://tunetx.com/developers
+  status: 404

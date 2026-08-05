@@ -1,0 +1,97 @@
+generated: '2026-08-05'
+method: probed
+source: https://tunetx.com/.well-known/oauth-authorization-server/
+name: Tune Therapeutics — authentication profile
+description: >-
+  Derived entirely from anonymously-readable discovery metadata and live challenge
+  responses on tunetx.com. Tune Therapeutics publishes no authentication documentation of
+  any kind — there is no developer portal, no auth guide, and no reference page. Everything
+  below was read off the wire from the OAuth 2.1 authorization server and the WordPress
+  REST API that the site's plugins expose.
+
+docs: null
+docs_note: >-
+  No authentication documentation exists to link. The provider could close this by
+  publishing an auth page, but there is no product API for it to describe.
+
+schemes:
+
+- id: mcp_oauth2
+  type: oauth2
+  name: WordPress MCP OAuth 2.1
+  applies_to:
+  - https://tunetx.com/wp-json/mcp/mcp-oauth-server
+  issuer: https://tunetx.com
+  metadata_url: https://tunetx.com/.well-known/oauth-authorization-server/
+  metadata_spec: RFC 8414
+  protected_resource_metadata_url: https://tunetx.com/.well-known/oauth-protected-resource
+  protected_resource_metadata_spec: RFC 9728
+  flows:
+    authorizationCode:
+      authorizationUrl: https://tunetx.com/oauth/authorize
+      tokenUrl: https://tunetx.com/oauth/token
+      refreshUrl: https://tunetx.com/oauth/token
+      revocationUrl: https://tunetx.com/oauth/revoke
+      scopes:
+        mcp: >-
+          The only scope the authorization server advertises. Grants access to the MCP
+          server; its concrete permission surface is not documented publicly.
+  grant_types_supported: [authorization_code, refresh_token]
+  response_types_supported: [code]
+  code_challenge_methods_supported: [S256]
+  pkce_required: true
+  token_endpoint_auth_methods_supported: [none]
+  public_client: true
+  client_id_metadata_document_supported: true
+  token_placement: 'Authorization: Bearer <token>'
+  observations:
+  - >-
+    PKCE with S256 is the only code-challenge method offered, and the token endpoint
+    accepts no client authentication — the modern OAuth 2.1 public-client shape.
+  - >-
+    client_id_metadata_document_supported is true, meaning clients may identify themselves
+    with a URL-hosted client metadata document rather than pre-registering.
+  - >-
+    A bare POST to the token endpoint returns HTTP 400 {"error":"unsupported_grant_type"} —
+    a real, correctly-behaving OAuth token endpoint, not a stub.
+
+- id: wp_application_passwords
+  type: http
+  scheme: basic
+  name: WordPress Application Passwords
+  applies_to:
+  - https://tunetx.com/wp-json/
+  authorization_url: https://tunetx.com/wp-admin/authorize-application.php
+  source: 'https://tunetx.com/wp-json/ → authentication.application-passwords'
+  note: >-
+    Advertised in the WordPress REST API index as the site's supported authentication
+    method for the wp/v2 and adapter routes. Credentials are issued from wp-admin, so this
+    is a site-operator mechanism, not a public developer credential.
+
+anonymous_access:
+- surface: https://tunetx.com/wp-json/wp/v2/posts
+  status: 200
+  note: >-
+    Public read of published site content is open, as on any default WordPress install.
+    No credential is required to read the marketing site's posts through the REST API.
+- surface: https://tunetx.com/wp-json/
+  status: 200
+  note: 432 routes across 23 namespaces enumerable anonymously.
+
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://tunetx.com/.well-known/oauth-authorization-server/
+    status: 200
+  - url: https://tunetx.com/.well-known/oauth-protected-resource
+    status: 200
+  - url: https://tunetx.com/oauth/token
+    method: POST
+    status: 400
+    body: '{"error":"unsupported_grant_type"}'
+  - url: https://tunetx.com/oauth/authorize
+    status: 301
+  - url: https://tunetx.com/wp-json/
+    status: 200
+  - url: https://tunetx.com/.well-known/openid-configuration
+    status: 404

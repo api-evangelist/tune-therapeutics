@@ -1,0 +1,108 @@
+generated: '2026-08-05'
+method: probed
+source: 'well-known/tune-therapeutics-well-known.yml, mcp/tune-therapeutics-mcp.yml'
+name: Tune Therapeutics — standards conformance
+description: >-
+  Cross-cutting standards asserted only where a probe actually observed conforming
+  behaviour. Tune Therapeutics makes no compliance or conformance claims anywhere on
+  tunetx.com — there is no trust center, no certifications page, and no security page — so
+  every `conforms: true` below is behavioural evidence from the OAuth/MCP surface its
+  WordPress plugins expose, not a claim the company makes about itself.
+
+standards:
+
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata
+  conforms: true
+  evidence: >-
+    https://tunetx.com/.well-known/oauth-authorization-server/ returns HTTP 200
+    application/json with issuer, authorization_endpoint, token_endpoint,
+    response_types_supported and grant_types_supported — the required RFC 8414 members.
+
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata
+  conforms: true
+  evidence: >-
+    https://tunetx.com/.well-known/oauth-protected-resource returns HTTP 200 with
+    resource, authorization_servers, bearer_methods_supported and scopes_supported, and the
+    MCP server's 401 WWW-Authenticate header points at it via resource_metadata.
+
+- id: rfc7636
+  name: PKCE (Proof Key for Code Exchange)
+  conforms: true
+  evidence: >-
+    code_challenge_methods_supported is ["S256"] and token_endpoint_auth_methods_supported
+    is ["none"] — PKCE is the only client protection offered, as OAuth 2.1 requires for
+    public clients.
+
+- id: oauth2
+  name: OAuth 2.0 / 2.1 authorization framework
+  conforms: true
+  evidence: >-
+    Live token endpoint at https://tunetx.com/oauth/token returns
+    {"error":"unsupported_grant_type"} with HTTP 400 for a malformed request — the RFC 6749
+    error envelope. Authorization, token and revocation endpoints are all advertised.
+
+- id: rfc7009
+  name: OAuth 2.0 Token Revocation
+  conforms: true
+  evidence: revocation_endpoint https://tunetx.com/oauth/revoke advertised in RFC 8414 metadata.
+
+- id: mcp
+  name: Model Context Protocol
+  conforms: partial
+  evidence: >-
+    Two live JSON-RPC 2.0 MCP endpoints under https://tunetx.com/wp-json/mcp/. The
+    OAuth-protected server implements the MCP authorization spec correctly (401 +
+    WWW-Authenticate Bearer + resource_metadata). Marked partial because the protocol
+    surface itself — initialize, tools/list, protocolVersion — could not be verified
+    anonymously, so conformance beyond the authorization handshake is unproven.
+
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: >-
+    https://tunetx.com/.well-known/openid-configuration returns HTTP 404. The OAuth server
+    is authorization-only and issues no ID tokens.
+
+- id: rfc9116
+  name: 'security.txt (RFC 9116)'
+  conforms: false
+  evidence: https://tunetx.com/.well-known/security.txt returns HTTP 404.
+
+- id: rfc9727
+  name: 'API catalog (.well-known/api-catalog)'
+  conforms: false
+  evidence: https://tunetx.com/.well-known/api-catalog returns HTTP 404.
+
+- id: openapi
+  name: OpenAPI
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document at any probed path on tunetx.com (/openapi.json,
+    /swagger.json, /api-docs all HTTP 404), and no api./docs./developer. subdomain resolves.
+
+- id: rfc9457
+  name: 'Problem Details for HTTP APIs (RFC 9457)'
+  conforms: false
+  evidence: >-
+    Error bodies observed on the MCP and REST surfaces use the WordPress envelope
+    {"code","message","data":{"status"}} with content-type application/json, not
+    application/problem+json.
+
+- id: a2a
+  name: 'Agent2Agent (A2A) agent card'
+  conforms: false
+  evidence: >-
+    Both /.well-known/agent-card.json and the legacy /.well-known/agent.json return
+    HTTP 404 on tunetx.com.
+
+sector_standards_note: >-
+  Tune Therapeutics is a clinical-stage biotechnology company. Life-science data standards
+  a peer might conform to — CDISC SDTM/ADaM, HL7 FHIR, GA4GH — are not asserted here in
+  either direction: the company exposes no data surface where such conformance could be
+  observed, and it publishes no claim to check.
+
+x-evidence:
+  fetched: '2026-08-05'
+  host: tunetx.com

@@ -1,0 +1,55 @@
+generated: '2026-08-05'
+method: probed
+source: https://tunetx.com/.well-known/oauth-authorization-server/
+name: Tune Therapeutics — OAuth scopes
+description: >-
+  The complete scope surface advertised by the OAuth 2.1 authorization server on
+  tunetx.com. Read verbatim from `scopes_supported` in the RFC 8414 metadata document and
+  cross-checked against `scopes_supported` in the RFC 9728 protected-resource document.
+  Both name exactly one scope. Tune Therapeutics publishes no scopes or permissions
+  reference page, so there is nothing to enrich these descriptions from — the meaning
+  below is stated as observed, not as documented.
+
+docs: null
+docs_note: No scopes or permissions reference page is published on tunetx.com.
+
+authorization_server: https://tunetx.com
+authorization_endpoint: https://tunetx.com/oauth/authorize
+token_endpoint: https://tunetx.com/oauth/token
+revocation_endpoint: https://tunetx.com/oauth/revoke
+
+scopes:
+- name: mcp
+  description: >-
+    Access to the site's Model Context Protocol server at
+    https://tunetx.com/wp-json/mcp/mcp-oauth-server. The authorization server advertises no
+    finer-grained scopes, so this single scope is the whole consent surface — a client
+    either has MCP access or it does not. What that access actually permits depends on the
+    WordPress abilities registered on the site, which is itself auth-gated (HTTP 401) and
+    was not enumerated.
+  source: >-
+    scopes_supported in both /.well-known/oauth-authorization-server/ and
+    /.well-known/oauth-protected-resource
+  granularity: coarse
+
+observations:
+- >-
+  One scope for an entire MCP server is a coarse consent boundary. There is no read-vs-write
+  split, no per-ability scope, and no way for a user granting consent to see what the token
+  will be able to do.
+- >-
+  Because token_endpoint_auth_methods_supported is ["none"] and dynamic client identification
+  via client_id metadata documents is enabled, any public client that completes the PKCE
+  flow with a site user can obtain this scope.
+
+x-evidence:
+  fetched: '2026-08-05'
+  probes:
+  - url: https://tunetx.com/.well-known/oauth-authorization-server/
+    status: 200
+    field: scopes_supported
+    value: ['mcp']
+  - url: https://tunetx.com/.well-known/oauth-protected-resource
+    status: 200
+    field: scopes_supported
+    value: ['mcp']
