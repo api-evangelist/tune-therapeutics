@@ -44,6 +44,10 @@ apis:
   baseURL: https://tunetx.com/wp-json/mcp/
   tags:
   - MCP
+  - Authentication
+  - WordPress
+  tags_raw:
+  - MCP
   - Model Context Protocol
   - OAuth
   - WordPress
