@@ -10,6 +10,17 @@ description: 'Tune Therapeutics is a clinical-stage epigenetic editing biotechno
   the only machine-readable surface it exposes is the WordPress REST API and a pair of
   OAuth-gated Model Context Protocol servers shipped by plugins on its corporate marketing site.'
 url: https://raw.githubusercontent.com/api-evangelist/tune-therapeutics/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://tunetx.com/wp-content/uploads/2022/10/TuneTx_Meta.png
 x-type: company
 x-source: harvest:secondary-market
