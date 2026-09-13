@@ -92,5 +92,9 @@ deployment:
   endpoint: https://tunetx.com/wp-json/mcp/mcp-oauth-server
   verified: probed
   probe: wall
-  checked: '2026-08-12'
-  source: catalog MCP census
+  checked: '2026-09-11'
+  source: wall re-adjudication 2026-09-11, reverted as platform-shipped
+  probe_prior: wall
+  probe_why: 'REVERTED 2026-09-11: the endpoint answers, but it is a WordPress MCP plugin route on the
+    marketing site, not a provider-authored server. Platform-shipped surfaces are not credited (see the
+    ReadMe/WebMCP finding).'
