@@ -1,0 +1,25 @@
+# Front Door AI Index — tune-therapeutics — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: tune-therapeutics
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: tunetx.com
+  final_host: tunetx.com
+  ownership: own
+  owner: tune-therapeutics
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 1
+  host_score: 1
+  density: 1.45
+  words: 688
+  tiers:
+    agentic: 1
+    core: 0
+    model: 0
+  ambiguous: 0
+  top_terms:
+    fine-tune: 1
